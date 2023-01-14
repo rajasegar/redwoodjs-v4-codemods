@@ -10,8 +10,18 @@
   },
   "bin": "./bin/cli.js",
   "keywords": [
-    "codemod-cli"
+    "codemod-cli",
+    "codemods",
+    "codemod",
+    "redwood",
+    "redwoodjs"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rajasegar/redwoodjs-v4-codemods"
+  },
+   "license": "MIT",
+  "author": "Rajasegar Chandran <rajasegar.c@gmail.com>",
   "dependencies": {
     "codemod-cli": "^3.2.0"
   },
