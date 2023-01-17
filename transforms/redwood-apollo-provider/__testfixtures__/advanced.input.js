@@ -1,9 +1,14 @@
+import FatalErrorPage from 'src/pages/FatalErrorPage';
+import Routes from 'src/Routes';
+
+import './index.css';
+
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-      <AuthProvider client={auth0} type="auth0">
+      <RedwoodApolloProvider>
         <Routes />
-      </AuthProvider>
+      </RedwoodApolloProvider>
     </RedwoodProvider>
   </FatalErrorBoundary>
 );

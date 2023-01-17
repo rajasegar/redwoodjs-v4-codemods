@@ -4,58 +4,56 @@ module.exports = function transformer(file, api) {
 
   root
     .find(j.JSXElement, {
-      openingElement: { name: { name: 'AuthProvider' } },
+      openingElement: { name: { name: 'RedwoodProvider' } },
     })
     .forEach((path) => {
-      const attrs = path.value.openingElement.attributes;
-      // Remove client and type attrs
-      const newAttrs = attrs.filter((a) => !['client', 'type'].includes(a.name.name));
-      path.value.openingElement.attributes = newAttrs;
-      const useAuthAttr = attrs.filter((a) => a.name.name === 'useAuth').length;
-      if (!useAuthAttr) {
+      const hasChild = path.value.children.filter(
+        (c) => c.openingElement && c.openingElement.name.name === 'AuthProvider'
+      ).length;
+
+      if (!hasChild) {
         const newComp = j.jsxElement(
-          j.jsxOpeningElement(
-            j.jsxIdentifier('RedwoodApolloProvider'),
-            [
-              j.jsxAttribute(
-                j.jsxIdentifier('useAuth'),
-                j.jsxExpressionContainer(j.identifier('useAuth'))
-              ),
-            ],
-            false
-          ),
-          j.jsxClosingElement(j.jsxIdentifier('RedwoodApolloProvider')),
+          j.jsxOpeningElement(j.jsxIdentifier('AuthProvider'), [], false),
+          j.jsxClosingElement(j.jsxIdentifier('AuthProvider')),
           path.value.children,
           false
         );
 
-        const hasChild = path.value.children.filter(
-          (c) => c.openingElement && c.openingElement.name.name === 'RedwoodApolloProvider'
-        ).length;
-        if (!hasChild) {
-          path.value.children = [newComp];
+        path.value.children = [j.jsxText('\n  '), newComp, j.jsxText('\n  ')];
+
+        root
+          .find(j.JSXElement, {
+            openingElement: { name: { name: 'RedwoodApolloProvider' } },
+          })
+          .forEach((path) => {
+            const useAuthAttr = j.jsxAttribute(
+              j.jsxIdentifier('useAuth'),
+              j.jsxExpressionContainer(j.identifier('useAuth'))
+            );
+            path.value.openingElement.attributes.push(useAuthAttr);
+          });
+
+        const authImport = root.find(j.ImportDeclaration, {
+          source: { value: './auth' },
+        });
+
+        const hasAuthImport = authImport.length > 0;
+
+        if (!hasAuthImport) {
+          const importDecl = j.importDeclaration(
+            [
+              j.importSpecifier(j.identifier('AuthProvider'), j.identifier('AuthProvider')),
+              j.importSpecifier(j.identifier('useAuth'), j.identifier('useAuth')),
+            ],
+            j.stringLiteral('./auth')
+          );
+          let body = root.get().value.program.body;
+          body.unshift(importDecl);
         }
-      }
-
-      const hasAuthImport =
-        root.find(j.ImportDeclaration, {
-          source: { value: 'src/auth' },
-        }).length > 0;
-
-      if (!hasAuthImport) {
-        const importDecl = j.importDeclaration(
-          [
-            j.importSpecifier(j.identifier('AuthProvider'), j.identifier('AuthProvider')),
-            j.importSpecifier(j.identifier('useAuth'), j.identifier('useAuth')),
-          ],
-          j.stringLiteral('src/auth')
-        );
-        let body = root.get().value.program.body;
-        body.unshift(importDecl);
       }
     });
 
-  return root.toSource({ quote: 'single' });
+  return root.toSource({ quote: 'single', tabWidth: 2 });
 };
 
 module.exports.type = 'js';
