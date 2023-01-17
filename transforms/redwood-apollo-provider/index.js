@@ -36,24 +36,24 @@ module.exports = function transformer(file, api) {
           path.value.children = [newComp];
         }
       }
+
+      const hasAuthImport =
+        root.find(j.ImportDeclaration, {
+          source: { value: 'src/auth' },
+        }).length > 0;
+
+      if (!hasAuthImport) {
+        const importDecl = j.importDeclaration(
+          [
+            j.importSpecifier(j.identifier('AuthProvider'), j.identifier('AuthProvider')),
+            j.importSpecifier(j.identifier('useAuth'), j.identifier('useAuth')),
+          ],
+          j.stringLiteral('src/auth')
+        );
+        let body = root.get().value.program.body;
+        body.unshift(importDecl);
+      }
     });
-
-  const hasAuthImport =
-    root.find(j.ImportDeclaration, {
-      source: { value: 'src/auth' },
-    }).length > 0;
-
-  if (!hasAuthImport) {
-    const importDecl = j.importDeclaration(
-      [
-        j.importSpecifier(j.identifier('AuthProvider'), j.identifier('AuthProvider')),
-        j.importSpecifier(j.identifier('useAuth'), j.identifier('useAuth')),
-      ],
-      j.stringLiteral('src/auth')
-    );
-    let body = root.get().value.program.body;
-    body.unshift(importDecl);
-  }
 
   return root.toSource({ quote: 'single' });
 };

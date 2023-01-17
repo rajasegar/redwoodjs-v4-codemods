@@ -2,6 +2,7 @@
 
 ![Build and Deploy](https://github.com/rajasegar/redwoodjs-v4-codemods/workflows/CI/badge.svg)
 [![npm version](http://img.shields.io/npm/v/redwoodjs-v4-codemods.svg?style=flat)](https://npmjs.org/package/redwoodjs-v4-codemods 'View this project on npm')
+[![Coverage Status](https://coveralls.io/repos/github/rajasegar/redwoodjs-v4-codemods/badge.svg?branch=main)](https://coveralls.io/github/rajasegar/redwoodjs-v4-codemods?branch=main)
 
 
 
