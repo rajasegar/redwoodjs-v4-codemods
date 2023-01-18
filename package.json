@@ -1,6 +1,6 @@
 {
   "name": "redwoodjs-v4-codemods",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "lint": "eslint --cache .",
     "test": "codemod-cli test",
@@ -19,7 +19,7 @@
     "type": "git",
     "url": "https://github.com/rajasegar/redwoodjs-v4-codemods"
   },
-   "license": "MIT",
+  "license": "MIT",
   "author": "Rajasegar Chandran <rajasegar.c@gmail.com>",
   "dependencies": {
     "codemod-cli": "^3.2.0"
