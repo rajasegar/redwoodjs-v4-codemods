@@ -1,6 +1,6 @@
 {
   "name": "redwoodjs-v4-codemods",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "scripts": {
     "lint": "eslint --cache .",
     "test": "codemod-cli test",
